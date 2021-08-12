@@ -1,0 +1,24 @@
+@charset "utf-8";
+
+html{
+    font-size:62.5%;
+}
+
+body{
+    color:#333333;
+    font-family:"Open Sans",'ヒラギノ角ゴ ProN W3', Hiragino Kaku Gothic ProN, "メイリオ", Meiryo, sans-serif;
+    font-size:1.6rem;
+}
+
+img{
+    max-width: 100%;
+    height: auto;
+}
+
+.create{
+    display: none;
+}
+
+.delete_btn{
+    display: none;
+}

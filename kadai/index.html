@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main>
+        <p>チェック項目</p>
+        <div id="check"><!--
+            <label> <input type='checkbox' class='checkbox'>" +  text +  "<input type='button' class='delete_btn' value='削除'></label>
+            <label> <input type='checkbox' class='checkbox'>" +  text +  "<input type='button' class='delete_btn' value='削除'></label>
+            <label> <input type='checkbox' class='checkbox'>" +  text +  "<input type='button' class='delete_btn' value='削除'></label>
+            <label> <input type='checkbox' class='checkbox'>" +  text +  "<input type='button' class='delete_btn' value='削除'></label>
+            <label> <input type='checkbox' class='checkbox'>" +  text +  "<input type='button' class='delete_btn' value='削除'></label>
+            こう入る予定-->
+        </div>
+
+        <div id='create_text'>項目を作る</div>
+        <div id='create' class='create'>
+            <input type="text" id="text">
+            <input type="button" id="create_btn" value="作成">
+        </div>
+        <div id='delete_text'>項目を消す</div>
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        const list = [];
+
+        /*[項目を作る]を押したとき*/
+        $('#create_text').on('click', function(){
+            $('#create').show();
+        });
+
+        /*作成ボタンを押したとき*/
+        $('#create_btn').on('click', function(){
+            if(list.length < 5){
+                const text = $('#text').val();
+                list.push("<label> <input type='checkbox' class='checkbox'>" +  text +  "<input type='button' class='delete_btn' value='削除'></label>");
+                for(let i = 0; i < list.length; i++){
+                    const jsonData = JSON.stringify(list[i]);
+                    localStorage.setItem('memo'+ i , jsonData);
+                }
+                $('#check').html(list);
+            }else{
+                alert('5項目が限度です');
+            }
+            $('#text').val('');
+            $('#create').hide();
+        });
+
+        /*[項目を消す]を押したとき*/
+        $('#delete_text').on('click', function(){
+           $('.delete_btn').show();
+        });
+
+        /*削除ボタンを押したとき*/
+        $('#check').on('click', '.delete_btn', function(){
+            const num = $(this).index("label");
+            list.splice(num , 1);
+            localStorage.clear();
+            for(let i = 0; i < list.length; i++){
+                const jsonData = JSON.stringify(list[i]);
+                localStorage.setItem('memo'+ i , jsonData);
+            }
+            $('#check').html(list);
+        });
+
+        for(let k = 0; k < localStorage.length; k++){
+            if(localStorage.getItem('memo'+ k)){
+                const jsonTaxt = localStorage.getItem('memo'+ k);
+                const text = JSON.parse(jsonTaxt);
+                list.push(text);
+            }
+        }
+        $('#check').html(list);
+    </script>
+</body>
+</html>
