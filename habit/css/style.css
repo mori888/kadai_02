@@ -1,0 +1,128 @@
+@charset "utf-8";
+
+html{
+    font-size:62.5%;
+    background-color: antiquewhite;
+}
+
+body{
+    color:#333333;
+    font-family:"Open Sans",'ヒラギノ角ゴ ProN W3', Hiragino Kaku Gothic ProN, "メイリオ", Meiryo, sans-serif;
+    font-size:1.6rem;
+}
+
+img{
+    max-width: 100%;
+    height: auto;
+}
+
+label{
+    display: block;
+    width: 100%;
+    padding: 1.5rem;
+}
+
+.back_img{
+    width: 70%;
+    min-width: 820px;
+    text-align: center;
+    margin: auto;
+    position: relative;
+}
+
+.main{
+    width: 60%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+}
+
+.title{
+    margin: 2.5rem;
+    font-size: 5rem;
+    font-weight: bold;
+}
+
+.content{
+    width: 100%;
+    margin: auto;
+    background-color: rgba(255, 255, 255, 70%) ;
+}
+
+.head{
+    padding: 2rem 0 0;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.check{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 1rem 4rem;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: left;
+}
+
+.create_text{
+    width: auto;
+    font-size: 2.4rem;
+}
+
+.foot{
+    display: flex;
+    margin-top: 2rem;
+}
+
+.btn{
+    margin: auto;
+    width: 10rem;
+    font-size: 1.5rem;
+    color: #333333;
+    text-align: center;
+    display: block;
+    padding: 10px 0 10px;
+    background :#FFFFFF;
+    border-radius: 20px;
+} 
+
+.create{
+    padding: 2rem;
+    text-align: center;
+    margin: auto;
+    display: none;
+}
+
+.delete_btn{
+    display: none;
+}
+
+.lastweek{
+    margin-top: 5rem;
+    text-align: center;
+    font-size: 15rem;
+}
+
+.back_btn{
+    position: absolute;
+    bottom: 15rem;
+    right: 0;
+    width: auto;
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: none;
+    display: none;
+}
+
+input[type*='checkbox']{
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 2rem;
+    border: solid 1px #a0a0a0;
+    border-radius: 50%;
+    vertical-align: -3px;
+}

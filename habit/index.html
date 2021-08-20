@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main>
+        <div class='back_img'>
+            <img src="image\back.jpg" alt="">
+            <div class='main'>
+                <h1 class='title'>habit-week</h1>
+                <div class='content'>
+                    <div class='head'>チェック項目</div>
+                    <div id="check" class='check'><!--
+                        最大５項目作れる
+                        <label> <input type='checkbox' class='checkbox'>" +  text +  "<input type='button' class='delete_btn' value='削除'></label>
+                        <label> <input type='checkbox' class='checkbox'>" +  text +  "<input type='button' class='delete_btn' value='削除'></label>
+                        <label> <input type='checkbox' class='checkbox'>" +  text +  "<input type='button' class='delete_btn' value='削除'></label>
+                        <label> <input type='checkbox' class='checkbox'>" +  text +  "<input type='button' class='delete_btn' value='削除'></label>
+                        <label> <input type='checkbox' class='checkbox'>" +  text +  "<input type='button' class='delete_btn' value='削除'></label>
+                        こう入る予定-->
+                    </div>
+                </div>
+                <div id='foot' class='foot'>
+                    <button id='create_text' class='btn'>項目を作る</button>
+                    <button id='delete_text' class='btn'>項目を消す</button>
+                    <button id='lastweek_text' class='btn'>先週の結果</button>
+                    <div id='create' class='create'>
+                        <input type='text' id='text' maxlength='14' placeholder='最大14字'>
+                        <input type='button' id='create_btn' value='作成'>
+                    </div>
+                </div>
+                <a href="index.html" id='back_btn' class='back_btn'>最初に戻る</a>
+            </div>
+        </div>  
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        const list = [];
+
+        /*[項目を作る]を押したとき*/
+        $('#create_text').on('click', function(){
+            $('#create_text').hide();
+            $('#delete_text').hide();
+            $('#lastweek_text').hide();
+            $('#create').show();
+            $('#back_btn').show();
+        });
+
+        /*作成ボタンを押したとき*/
+        $('#foot').on('click', '#create_btn', function(){
+            if(list.length < 5){
+                const text = $('#text').val();
+                list.push("<label><input type='checkbox' class='checkbox'>" + text + "<input type='button' class='delete_btn' value='削除'></label>");
+                for(let i = 0; i < list.length; i++){
+                    const jsonData = JSON.stringify(list[i]);
+                    localStorage.setItem('memo'+ i , jsonData);
+                }
+                $('#check').html(list);
+            }else{
+                alert('5項目が限度です');
+            }
+            $('#text').val('');
+            $('#create').hide();
+            $('#create_text').show();
+            $('#delete_text').show();
+            $('#lastweek_text').show();
+            $('#back_btn').hide();
+        });
+
+        /*[項目を消す]を押したとき*/
+        $('#delete_text').on('click', function(){
+            $('#create_text').hide();
+            $('#delete_text').hide();
+            $('#lastweek_text').hide();
+            $('.delete_btn').show();
+            $('#back_btn').show();
+        });
+
+        /*削除ボタンを押したとき*/
+        $('#check').on('click', '.delete_btn', function(){
+            const num = $(this).parent('label').index();
+            list.splice(num , 1);
+            for(let h = 0; h <= localStorage.length; h++){
+                localStorage.removeItem('memo'+h);
+            }
+            for(let i = 0; i < list.length; i++){
+                const jsonData = JSON.stringify(list[i]);
+                localStorage.setItem('memo'+ i , jsonData);
+            }
+            $('#check').html(list);
+            $('#create_text').show();
+            $('#delete_text').show();
+            $('#lastweek_text').show();
+            $('#back_btn').hide();
+        });
+
+        /*チェックを押したとき*/
+        $('#check').on('change', '.checkbox', function(){
+            const num = $(this).parent('label').index();
+            const text = $(this).parent('label').text();
+            if($(this).prop('checked')){
+                list[num] = "<label><input type='checkbox' class='checkbox' checked>" + text + "<input type='button' class='delete_btn' value='削除'></label>"
+                const jsonData = JSON.stringify(list[num]);
+                localStorage.setItem('memo'+ num , jsonData);
+            }else{
+                list[num] = "<label><input type='checkbox' class='checkbox'>" + text + "<input type='button' class='delete_btn' value='削除'></label>"
+                const jsonData = JSON.stringify(list[num]);
+                localStorage.setItem('memo'+ num , jsonData);
+            } 
+        });
+        
+        /*先週の結果を押したとき*/
+        $('#lastweek_text').on('click', function(){
+            $('#lastweek_text').hide();
+            $('#create_text').hide();
+            $('#delete_text').hide();
+            const lastweek = localStorage.getItem('lastweek');
+            $('.content').html("<div id='lastweek' class='lastweek'>"+ lastweek + '%' +"</div>");
+            $('#back_btn').show();
+        })
+
+
+        const date = new Date();
+        const day = (date.getFullYear() + ',' + (date.getMonth()+1) + ',' + date.getDate());
+        const date2 = new Date(day);
+        const today = date2.getTime();
+        const week = date.getDay();
+
+        /*日付が変わったか判断する処理*/
+        $(function(){
+            const yestaday = localStorage.getItem('today');
+            if(/*today != yestaday*/true){
+                /*既に値が入っていたら１週間分のチェック率を保存、その後消す*/
+                if(/*localStorage.getItem('day'+ week)*/true){
+                    let percent = 0;
+                    for(let j = 0; j <= localStorage.length; j++){
+                        if(localStorage.getItem('day'+ j)){
+                            percent = +localStorage.getItem('day' + j);
+                            localStorage.removeItem('day' + j);
+                        }
+                    }
+                    const lastweek = Math.floor(percent / 7 * 100 );
+                    localStorage.setItem('lastweek', lastweek);
+                }
+
+                /*その日のチェック率を保存*/
+                const count = $('#check input:checkbox').length;
+                const check_count = $('#check input:checkbox:checked').length;
+                const check = check_count / count;
+                localStorage.setItem('day'+ week , check);
+
+                /*チェックしていない日にはチェック率0を入れる*/
+                for(let l = 0; l < week; l++){
+                    if(localStorage.getItem('day'+ l) == null){
+                        localStorage.setItem('day'+ l, 0);
+                    }
+                }
+
+                /*チェックを全て消す*/
+                for(let n = 0; n < list.length; n++){
+                    const text = $('label').eq(n).text();
+                    list[n] = "<label><input type='checkbox' class='checkbox'>" + text +  "<input type='button' class='delete_btn' value='削除'></label>"
+                    const jsonData = JSON.stringify(list[n]);
+                    localStorage.setItem('memo'+ n , jsonData);
+                }
+                $('#check').html(list);
+            }
+            localStorage.setItem('today', today);
+        });
+
+
+
+        /*更新*/
+        for(let k = 0; k <= localStorage.length; k++){
+            if(localStorage.getItem('memo'+ k)){
+                const jsonTaxt = localStorage.getItem('memo'+ k);
+                const text = JSON.parse(jsonTaxt);
+                list[k] = text;
+            }
+        }
+        $('#check').html(list);
+    </script>
+</body>
+</html>
